@@ -1,77 +1,14 @@
-item.steampowered:itemTest.name=A Test Item
-
-# Ores
-tile.steampowered:oreCopper.name=Copper Ore
-tile.steampowered:oreZinc.name=Zinc Ore
-
-# Machines - Basic
-tile.steampowered:machineAlloyFurnace.name=Alloy Furnace
-tile.steampowered:machineFirebox.name=Firebox
-tile.steampowered:machineFireboxBurning.name=Burning Firebox
-tile.steampowered:machineChimneyStack.name=Chimney Stack
-tile.steampowered:machineHotPlate.name=Hot Plate
-
-# Machines - Steam
-tile.steampowered:machineSteamPipeBrass.name=Brass Steam Pipe
-tile.steampowered:machineSteamPipeSteel.name=Steel Steam Pipe
-tile.steampowered:machineSteamBoiler.name=Steam Boiler
-tile.steampowered:machineSteamVent.name=Steam Vent
-tile.steampowered:machineSteamPiston.name=Steam Piston
-tile.steampowered:machineSteamEngine.name=Steam Engine
-
-# Machines - Mechanical
-tile.steampowered:machineDoorFrame.name=Mechanical Door Frame
-tile.steampowered:machineDoorBody.name=Mechanical Door Body
-tile.steampowered:machineGear.name=Mechanical Gear Logic Block - SHOULD NOT HAVE
-tile.steampowered:machineAxle.name=Mechanical Axle
-item.steampowered:itemGear.name=Mechanical Gear
-
-# Artifice
-tile.steampowered:blockInfused.name=Infused Block
 
 # Ingots
 item.steampowered:ingotCopper.name=Copper Ingot
-item.steampowered:ingotZinc.name=Zinc Ingot
+item.steampowered:ingotTin.name=Tin Ingot
 item.steampowered:ingotBrass.name=Brass Ingot
 item.steampowered:ingotSteel.name=Steel Ingot
 
-# Tools
-item.steampowered:toolPressureGauge.name=Pressure Gauge
-item.steampowered:toolWrench.name=Wrench
+# Ores
+tile.steampowered:oreCopper.name=Copper Ore
+tile.steampowered:oreTin.name=Tin Ore
 
-# General Items
-item.steampowered:itemAsh.name=Ash
-item.steampowered:itemScrap.name=Scrap
-item.steampowered:itemInstantHeat.name=Instant Heat Source
-
-# General Blocks
-tile.steampowered:blockRubble.name=Rubble
-tile.steampowered:blockRuinedScaffold.name=Ruined Scaffold
-tile.steampowered:blockMechanusPortal.name=Mechanus Portal
-tile.steampowered:blockMechanusWorld.name=Mechanus Bedrock
-tile.steampowered:blockLamp.name=Worn Lamp
-
-# Blocks - Walls
-tile.steampowered:blockWallSteel.name=Steel Wall
-
-# Blocks - Panels
-tile.steampowered:blockPanelBrass.name=Brass Panel
-tile.steampowered:blockPanelIron.name=Iron Panel
-
-# Blocks - Gratings
-tile.steampowered:blockGrateRusty.name=Rusty Grating
-tile.steampowered:blockGrateCopper.name=Copper Vent
-tile.steampowered:blockGrateBrass.name=Brass Mesh
-tile.steampowered:blockGrateIron.name=Iron Grating
-tile.steampowered:blockGrateSteel.name=Steel Grating
-
-# Creative Tab/s
-itemGroup.steampowered=Steam Powered
-
-# Keys
-keys.steampowered.category=Steam Powered
-keys.steampowered.charge=Charge
-keys.steampowered.release=Release
-
-# GUI
-gui.steampowered:container.alloyfurnace=Alloy Furnace
+# Machines - Basic
+tile.steampowered:machineHotPlate.name=Hot Plate
+tile.steampowered:machineFireBox.name=Fire Box

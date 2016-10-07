@@ -1,16 +1,17 @@
 package com.majorpotato.steampowered.handler;
 
-import com.majorpotato.steampowered.reference.Reference;
-import cpw.mods.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import com.majorpotato.steampowered.SteamPowered;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.io.File;
 
 public class ConfigHandler
 {
     public static Configuration config;
-    public static boolean testValue = false;
+
+    public static boolean DEBUG_MODE = false;
 
     public static void init(File configFile)
     {
@@ -21,7 +22,7 @@ public class ConfigHandler
     }
     private static void loadConfiguration()
     {
-        testValue = config.getBoolean("configValue", Configuration.CATEGORY_GENERAL, false, "This is an example configuration value.");
+        DEBUG_MODE = config.getBoolean("debugMode", Configuration.CATEGORY_GENERAL, false, "Display extra debug information and other useful tools in-game.");
 
         if (config.hasChanged())
         {
@@ -32,7 +33,7 @@ public class ConfigHandler
     @SubscribeEvent
     public void onConfigurationChangedEvent(ConfigChangedEvent.OnConfigChangedEvent event)
     {
-        if(event.modID.equalsIgnoreCase(Reference.MOD_ID))
+        if(event.getModID().equalsIgnoreCase(SteamPowered.MODID))
         {
             loadConfiguration();
         }

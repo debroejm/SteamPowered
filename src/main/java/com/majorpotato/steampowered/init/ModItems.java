@@ -1,49 +1,45 @@
 package com.majorpotato.steampowered.init;
 
 import com.majorpotato.steampowered.item.*;
-import com.majorpotato.steampowered.item.ingot.IngotBrass;
-import com.majorpotato.steampowered.item.ingot.IngotCopper;
-import com.majorpotato.steampowered.item.ingot.IngotSteel;
-import com.majorpotato.steampowered.item.ingot.IngotZinc;
-import com.majorpotato.steampowered.reference.Reference;
-import cpw.mods.fml.common.registry.GameRegistry;
+import com.majorpotato.steampowered.util.OreMaterial;
+import net.minecraft.client.Minecraft;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.oredict.OreDictionary;
 
-import static net.minecraftforge.oredict.OreDictionary.registerOre;
+import java.util.HashMap;
 
-@GameRegistry.ObjectHolder(Reference.MOD_ID)
-public class ModItems
-{
-    //public static final Item testItem = new ItemTest();
-    public static final Item ingotCopper = new IngotCopper();
-    public static final Item ingotZinc = new IngotZinc();
-    public static final Item ingotBrass = new IngotBrass();
-    public static final Item ingotSteel = new IngotSteel();
-    public static final Item itemAsh = new ItemAsh();
-    public static final Item itemScrap = new ItemScrap();
-    public static final Item itemInstantHeat = new ItemInstantHeat();
-    public static final Item itemGear = new ItemGear();
+public class ModItems {
 
-    public static final Item toolPressureGauge = new ToolDataCollector();
-    public static final Item toolWrench = new ToolWrench();
+    // Ingot Mapping
+    private static HashMap<OreMaterial, ItemIngot> ingots = new HashMap<OreMaterial, ItemIngot>();
+    public static Item getIngot(OreMaterial material) {
+        return ingots.get(material);
+    }
 
-    public static void init()
-    {
-        //GameRegistry.registerItem(testItem, "testItem");
-        GameRegistry.registerItem(ingotCopper, "ingotCopper");
-        GameRegistry.registerItem(ingotZinc, "ingotZinc");
-        GameRegistry.registerItem(ingotBrass, "ingotBrass");
-        GameRegistry.registerItem(ingotSteel, "ingotSteel");
-        GameRegistry.registerItem(itemAsh, "itemAsh");
-        GameRegistry.registerItem(itemScrap, "itemScrap");
-        GameRegistry.registerItem(toolPressureGauge, "toolPressureGauge");
-        GameRegistry.registerItem(toolWrench, "toolWrench");
-        GameRegistry.registerItem(itemInstantHeat, "itemInstantHeat");
-        GameRegistry.registerItem(itemGear, "itemGear");
+    public static void registerItems() {
 
-        registerOre("ingotCopper", ingotCopper);
-        registerOre("ingotTin", ingotZinc);
-        registerOre("ingotBronze", ingotBrass);
-        registerOre("ingotSteel", ingotSteel);
+        // Ingots
+        for(OreMaterial material : OreMaterial.INGOTS) {
+            if(!material.doAutoCreate() || material.getInstance(OreMaterial.Type.INGOT) != null) continue;
+            ItemIngot ingot = new ItemIngot(material);
+            GameRegistry.register(ingot);
+            ingots.put(material, ingot);
+        }
+    }
+
+    public static void registerColorHandlers() {
+        for(ItemIngot ingot : ingots.values()) {
+            Minecraft.getMinecraft().getItemColors().registerItemColorHandler(ingot, ingot);
+        }
+    }
+
+    public static void registerOreDictionaryEntries() {
+
+        // Register Ingots With Ore Dictionary
+        for(ItemIngot ingot : ingots.values()) {
+            OreDictionary.registerOre(ingot.getName(), ingot);
+        }
     }
 }

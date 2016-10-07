@@ -1,89 +1,76 @@
 package com.majorpotato.steampowered;
 
-import com.majorpotato.steampowered.commands.CommandAura;
-import com.majorpotato.steampowered.commands.CommandDebug;
-import com.majorpotato.steampowered.handler.ConnectionHandler;
-import com.majorpotato.steampowered.handler.GuiHandler;
-import com.majorpotato.steampowered.client.handler.KeyInputEventHandler;
-import com.majorpotato.steampowered.handler.PacketHandler;
-import com.majorpotato.steampowered.handler.events.ChunkEventHandler;
-import com.majorpotato.steampowered.init.*;
-import com.majorpotato.steampowered.proxy.IProxy;
-import com.majorpotato.steampowered.reference.Reference;
 import com.majorpotato.steampowered.handler.ConfigHandler;
-import com.majorpotato.steampowered.util.LogHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import com.majorpotato.steampowered.handler.OverlayHandler;
+import com.majorpotato.steampowered.init.ModBlocks;
+import com.majorpotato.steampowered.init.ModItems;
+import com.majorpotato.steampowered.init.ModRecipes;
+import com.majorpotato.steampowered.init.ModWorld;
+import com.majorpotato.steampowered.proxy.ProxyCommon;
+import com.majorpotato.steampowered.util.OreMaterial;
+import mcp.MethodsReturnNonnullByDefault;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.Mod.EventHandler;
+import net.minecraftforge.fml.common.SidedProxy;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-/*, dependencies = "after:ForgeMultipart"*/
-
-@Mod(modid = Reference.MOD_ID, name = Reference.MOD_NAME, version = Reference.VERSION, guiFactory = Reference.GUI_FACTORY_CLASS, dependencies = "required-after:olympiaAPI;required-before:olympia")
+@Mod(modid = SteamPowered.MODID, version = SteamPowered.VERSION)
 public class SteamPowered
 {
-    @Mod.Instance(Reference.MOD_ID)
+    public static final String MODID = "steampowered";
+    public static final String NAME = "Steam Powered";
+    public static final String VERSION = "1.0";
+
+    @Mod.Instance(MODID)
     public static SteamPowered instance;
 
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
-    public static IProxy proxy;
+    @SidedProxy(modId=MODID, clientSide="com.majorpotato.steampowered.proxy.ProxyClient", serverSide="com.majorpotato.steampowered.proxy.ProxyServer")
+    public static ProxyCommon proxy;
 
-    @Mod.EventHandler
-    public void preInit(FMLPreInitializationEvent event)
-    {
-        ConfigHandler.init(event.getSuggestedConfigurationFile());
-        FMLCommonHandler.instance().bus().register(new ConfigHandler());
-        MinecraftForge.EVENT_BUS.register(new ConnectionHandler());
-        MinecraftForge.EVENT_BUS.register(new ChunkEventHandler.DefaultBus());
-        //MinecraftForge.TERRAIN_GEN_BUS.register(new ChunkEventHandler.TerrainBus());
+    public static CreativeTabs modTab = new CreativeTabs(SteamPowered.NAME) {
+        @Override
+        @SideOnly(Side.CLIENT)
+        @MethodsReturnNonnullByDefault
+        public Item getTabIconItem() { return ModItems.getIngot(OreMaterial.BRASS); }
+    };
 
-        PacketHandler.init();
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent event) {
 
-        ModItems.init();
-        ModBlocks.init();
+        OreMaterial.registerMaterials();
+        ModItems.registerItems();
+        ModBlocks.registerBlocks();
         ModBlocks.registerTileEntities();
-        ModWorld.init();
-
-        proxy.registerKeyBindings();
+        ModWorld.initWorldGen();
         proxy.registerRenderThings();
 
-        LogHelper.info("Pre Initialization Complete!");
+    }
+    
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+
+        FMLCommonHandler.instance().bus().register(new ConfigHandler());
+        MinecraftForge.EVENT_BUS.register(new OverlayHandler());
+
+        ModItems.registerOreDictionaryEntries();
+        ModBlocks.registerOreDictionaryEntries();
+        ModItems.registerColorHandlers();
+        ModBlocks.registerColorHandlers();
+        ModRecipes.initRecipes();
+        proxy.registerTileEntityRenderers();
+
     }
 
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event)
-    {
-        FMLCommonHandler.instance().bus().register(new KeyInputEventHandler());
-
-        new GuiHandler();
-
-        Recipes.init();
-
-        new ModMultiParts();
-
-        LogHelper.info("Initialization Complete!");
-    }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event)
-    {
-        LogHelper.info("Post Initialization Complete!");
-
-        /*
-        for (String oreName : OreDictionary.getOreNames())
-        {
-            LogHelper.info(oreName);
-        }
-        */
-    }
-
-    @Mod.EventHandler
-    public void serverLoad(FMLServerStartingEvent event) {
-        event.registerServerCommand(new CommandDebug());
-        event.registerServerCommand(new CommandAura());
+    @EventHandler
+    public void postInit(FMLPostInitializationEvent event) {
+        ModRecipes.postInitRecipes();
     }
 }

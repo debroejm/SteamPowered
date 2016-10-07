@@ -1,21 +1,16 @@
 [
 {
-  "modid": "SteamPowered",
+  "modid": "steampowered",
   "name": "Steam Powered",
-  "description": "Master the Age of Steam.",
-  "version": "1.7.10-0.0.3",
-  "mcversion": "1.7.10",
+  "description": "SteamPunk Mod.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "url": "",
   "updateUrl": "",
-  "authorList": [
-    "majorpotato"
-  ],
-  "credits": "majorpotato",
+  "authorList": ["MajorPotato"],
+  "credits": "N/A",
   "logoFile": "",
-  "screenshots": [
-  ],
-  "parent":"",
-  "dependencies": [
-  ]
+  "screenshots": [],
+  "dependencies": []
 }
 ]
