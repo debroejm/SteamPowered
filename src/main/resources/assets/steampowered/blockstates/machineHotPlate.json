@@ -1,0 +1,25 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "stone": "steampowered:blocks/hotPlate_stone",
+            "internal": "steampowered:blocks/hotPlate_internal",
+            "plate": "steampowered:blocks/hotPlate_plate"
+        },
+        "model": "steampowered:machineHotPlate",
+        "transform": "forge:default-block"
+    },
+    "variants": {
+        "inventory": [{
+          "transform": "forge:default-block"
+        }],
+        "normal": [
+          { },
+          {
+            "textures": {
+              "plate": "steampowered:blocks/hotPlate_plate_crack1"
+            }
+          }
+        ]
+    }
+}

@@ -1,0 +1,18 @@
+{
+    "__comment": "Model generated using MrCrayfish's Model Creator (http://mrcrayfish.com/modelcreator/)",
+    "elements": [
+        {
+            "name": "Cube",
+            "from": [ -1.0, 0.0, -1.0 ], 
+            "to": [ 3.0, 16.0, 3.0 ], 
+            "faces": {
+                "north": { "texture": "#andesite",    "uv": [ 4.0, 0.0, 8.0, 16.0 ]  },
+                "east":  { "texture": "#andesite",    "uv": [ 8.0, 0.0, 12.0, 16.0 ] },
+                "south": { "texture": "#andesite",    "uv": [ 4.0, 0.0, 8.0, 16.0 ]  },
+                "west":  { "texture": "#andesite",    "uv": [ 8.0, 0.0, 12.0, 16.0 ] },
+                "up":    { "texture": "#slab",        "uv": [ 6.0, 6.0, 10.0, 10.0 ] },
+                "down":  { "texture": "#plate_stone", "uv": [ 3.0, 3.0, 7.0, 7.0 ]   }
+            }
+        }
+    ]
+}

@@ -1,0 +1,59 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "plate_stone": "steampowered:blocks/hotPlate_stone",
+      "slab": "blocks/stone_slab_top",
+      "brick": "blocks/stonebrick",
+      "andesite": "blocks/stone_andesite_smooth"
+    },
+    "model": "steampowered:machineFireBox_base",
+    "transform": "forge:default-block"
+  },
+  "variants": {
+    "inventory": [{
+      "submodel": {
+        "edge_north": {"model": "steampowered:machineFireBox_edge" },
+        "edge_east":  { "model": "steampowered:machineFireBox_edge", "y": 90 },
+        "edge_south": { "model": "steampowered:machineFireBox_edge", "y": 180 },
+        "edge_west":  { "model": "steampowered:machineFireBox_edge", "y": 270 },
+        "corner_nw": { "model": "steampowered:machineFireBox_corner" },
+        "corner_ne": { "model": "steampowered:machineFireBox_corner", "y": 90 },
+        "corner_se": { "model": "steampowered:machineFireBox_corner", "y": 180 },
+        "corner_sw": { "model": "steampowered:machineFireBox_corner", "y": 270 }
+      }
+    }],
+    "connect_north": {
+      "true": {},
+      "false": { "submodel": { "edge_north": {"model": "steampowered:machineFireBox_edge" }}}
+    },
+    "connect_east": {
+      "true": {},
+      "false": { "submodel": { "edge_east":  { "model": "steampowered:machineFireBox_edge", "y": 90 }}}
+    },
+    "connect_south": {
+      "true": {},
+      "false": { "submodel": { "edge_south": { "model": "steampowered:machineFireBox_edge", "y": 180 }}}
+    },
+    "connect_west": {
+      "true": {},
+      "false": { "submodel": { "edge_west":  { "model": "steampowered:machineFireBox_edge", "y": 270 }}}
+    },
+    "connect_north_west": {
+      "true": {},
+      "false": { "submodel": { "corner_nw": { "model": "steampowered:machineFireBox_corner" }}}
+    },
+    "connect_north_east": {
+      "true": {},
+      "false": { "submodel": { "corner_ne": { "model": "steampowered:machineFireBox_corner", "y": 90 }}}
+    },
+    "connect_south_east": {
+      "true": {},
+      "false": { "submodel": { "corner_se": { "model": "steampowered:machineFireBox_corner", "y": 180 }}}
+    },
+    "connect_south_west": {
+      "true": {},
+      "false": { "submodel": { "corner_sw": { "model": "steampowered:machineFireBox_corner", "y": 270 }}}
+    }
+  }
+}
