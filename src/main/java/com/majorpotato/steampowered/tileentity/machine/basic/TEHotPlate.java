@@ -39,6 +39,7 @@ public class TEHotPlate extends TileEntitySP implements ITickable, ISidedInvento
     protected boolean inventoryDirty = false;
 
     public static final int MAX_HEAT = 2000;
+    protected float lastHeat = 0;
     protected float currentHeat = 0;
     public int getCurrentHeat() { return (int)currentHeat; }
 
@@ -145,11 +146,13 @@ public class TEHotPlate extends TileEntitySP implements ITickable, ISidedInvento
         if(heatGained > 0.0f) {
             currentHeat += heatGained;
             if(currentHeat > MAX_HEAT) currentHeat = MAX_HEAT;
-            dirty = true;
         } else if(currentHeat > 0.0f) {
             currentHeat -= 1.0f;
             if(currentHeat < 0.0f) currentHeat = 0.0f;
+        }
+        if(Math.abs(currentHeat-lastHeat) > 20.0f) {
             dirty = true;
+            lastHeat = currentHeat;
         }
         if(dirty) {
             markDirty();
@@ -171,6 +174,7 @@ public class TEHotPlate extends TileEntitySP implements ITickable, ISidedInvento
             case SOUTH:
             case WEST:
             case EAST:
+            case DOWN:
                 return inputSlots;
             default:
                 return new int[]{};
@@ -185,6 +189,7 @@ public class TEHotPlate extends TileEntitySP implements ITickable, ISidedInvento
             case SOUTH:
             case WEST:
             case EAST:
+            case DOWN:
                 return index >= 0 && index < INVENTORY_SIZE && GenericRecipe.isItemValid(RecipeType.ALLOY_SMELTING, stack);
             default:
                 return false;
@@ -199,6 +204,7 @@ public class TEHotPlate extends TileEntitySP implements ITickable, ISidedInvento
             case SOUTH:
             case WEST:
             case EAST:
+            case DOWN:
                 return index >= 0 && index < INVENTORY_SIZE;
             default:
                 return false;

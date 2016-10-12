@@ -63,14 +63,12 @@ public class BlockFireBox extends BlockConnectable implements IDebuggable {
         return false;
     }
 
-    @Override
-    public boolean isFullCube(IBlockState state)
+    @Override public boolean isFullCube(IBlockState state)
     {
         return false;
     }
 
-    @Override
-    public boolean isOpaqueCube(IBlockState state)
+    @Override public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -79,10 +77,11 @@ public class BlockFireBox extends BlockConnectable implements IDebuggable {
     public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
     {
         addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_BASE);
-        if(state.getValue(CONNECT_NORTH)) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_NORTH);
-        if(state.getValue(CONNECT_SOUTH)) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_SOUTH);
-        if(state.getValue(CONNECT_EAST )) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_EAST );
-        if(state.getValue(CONNECT_WEST )) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_WEST );
+        state = state.getActualState(worldIn, pos);
+        if(!state.getValue(CONNECT_NORTH)) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_NORTH);
+        if(!state.getValue(CONNECT_SOUTH)) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_SOUTH);
+        if(!state.getValue(CONNECT_EAST )) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_EAST );
+        if(!state.getValue(CONNECT_WEST )) addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_WEST );
     }
 
     // TODO: Generate Light When Burning

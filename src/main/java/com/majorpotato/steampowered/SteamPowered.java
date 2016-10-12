@@ -35,7 +35,7 @@ public class SteamPowered
     @SidedProxy(modId=MODID, clientSide="com.majorpotato.steampowered.proxy.ProxyClient", serverSide="com.majorpotato.steampowered.proxy.ProxyServer")
     public static ProxyCommon proxy;
 
-    public static CreativeTabs modTab = new CreativeTabs(SteamPowered.NAME) {
+    public static CreativeTabs modTab = new CreativeTabs(SteamPowered.MODID) {
         @Override
         @SideOnly(Side.CLIENT)
         @MethodsReturnNonnullByDefault

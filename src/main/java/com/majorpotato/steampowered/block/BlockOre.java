@@ -35,8 +35,7 @@ public class BlockOre extends BlockSP implements IBlockColor {
     @Override
     @ParametersAreNonnullByDefault
     public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
-        if(tintIndex == 1) return material.getColor(OreMaterial.Type.ORE);
-        else return 0xFFFFFF;
+        return tintIndex == 0 ? material.getColor(OreMaterial.Type.ORE) : 0xFFFFFF;
     }
 
     @SideOnly(Side.CLIENT)

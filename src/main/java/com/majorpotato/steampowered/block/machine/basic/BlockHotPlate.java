@@ -79,13 +79,39 @@ public class BlockHotPlate extends BlockTESP implements IBlockColor, IDebuggable
     @Override
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, @Nullable ItemStack heldItem, EnumFacing side, float hitX, float hitY, float hitZ) {
         TileEntity te = worldIn.getTileEntity(pos);
-        if(hitY > 0.975f && te instanceof TEHotPlate && hand == EnumHand.MAIN_HAND) {
-            int index = 3 * (int)(hitX / 0.3334f) + (int)(hitY / 0.3334f);
+        if(hitY > 0.975f && te instanceof TEHotPlate/* && hand == EnumHand.MAIN_HAND*/) {
+            int index = (int)(hitX / 0.3334f) + 3 * (int)(hitZ / 0.3334f);
             TEHotPlate hotPlate = (TEHotPlate)te;
             if(index < 0 || index >= TEHotPlate.INVENTORY_SIZE) return false;
             ItemStack stack = hotPlate.getStackInSlot(index);
-            hotPlate.setInventorySlotContents(index, heldItem);
-            playerIn.setHeldItem(hand, stack);
+            if(stack == null && heldItem != null) {
+                if(hotPlate.canInsertItem(index, heldItem, EnumFacing.DOWN))
+                    hotPlate.setInventorySlotContents(index, heldItem);
+            } else if(heldItem == null) {
+                playerIn.setHeldItem(hand, stack);
+                hotPlate.setInventorySlotContents(index, null);
+            } else {
+                boolean pop = false;
+                if(heldItem.isItemEqual(stack)) {
+                    if (hotPlate.canInsertItem(index, heldItem, EnumFacing.DOWN)) {
+                        int diff = Math.min(stack.getMaxStackSize()-stack.stackSize, heldItem.stackSize);
+                        stack.stackSize += diff;
+                        heldItem.stackSize -= diff;
+                        if(heldItem.stackSize < 1) playerIn.setHeldItem(hand, null);
+                    } else {
+                        int diff = Math.min(heldItem.getMaxStackSize()-heldItem.stackSize, stack.stackSize);
+                        stack.stackSize -= diff;
+                        heldItem.stackSize += diff;
+                        if(stack.stackSize < 1) hotPlate.setInventorySlotContents(index, null);
+                        else pop = true;
+                    }
+                } else pop = true;
+                if(pop && !worldIn.isRemote) {
+                    EntityItem entItem = new EntityItem(playerIn.worldObj, playerIn.posX, playerIn.posY, playerIn.posZ, stack);
+                    hotPlate.setInventorySlotContents(index, null);
+                    playerIn.worldObj.spawnEntityInWorld(entItem);
+                }
+            }
             return true;
         } else return false;
     }
@@ -97,13 +123,28 @@ public class BlockHotPlate extends BlockTESP implements IBlockColor, IDebuggable
         return new TEHotPlate();
     }
 
+    @Override public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) { return false; }
+    @Override public boolean isFullCube(IBlockState state)
+    {
+        return false;
+    }
+    @Override public boolean isOpaqueCube(IBlockState state)
+    {
+        return false;
+    }
+    @Override public boolean isVisuallyOpaque() { return false; }
+
     @Override
     @ParametersAreNonnullByDefault
     public int colorMultiplier(IBlockState state, @Nullable IBlockAccess worldIn, @Nullable BlockPos pos, int tintIndex) {
         if(tintIndex == 1 && pos != null && worldIn != null) {
             TileEntity tent = worldIn.getTileEntity(pos);
-            if(tent instanceof TEHotPlate)
-                return 0xFFFFFF - (int)(((float)0x00BBBB) * ((float)((TEHotPlate)tent).getCurrentHeat() / (float)TEHotPlate.MAX_HEAT));
+            if(tent instanceof TEHotPlate) {
+                TEHotPlate plate = (TEHotPlate)tent;
+                int g = (0xFF - (int)( 0x99 * ((float)plate.getCurrentHeat() / (float)TEHotPlate.MAX_HEAT) )) << 8;
+                int b = 0xFF - (int)( 0x99 * ((float)plate.getCurrentHeat() / (float)TEHotPlate.MAX_HEAT) );
+                return 0xFF0000 + g + b;
+            }
         }
         return 0xFFFFFF;
     }

@@ -12,3 +12,6 @@ tile.steampowered:oreTin.name=Tin Ore
 # Machines - Basic
 tile.steampowered:machineHotPlate.name=Hot Plate
 tile.steampowered:machineFireBox.name=Fire Box
+
+# GUI
+itemGroup.steampowered=Steam Powered

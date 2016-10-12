@@ -19,7 +19,6 @@ public class ItemBlockOre extends ItemBlockSP implements IItemColor {
     @Override
     @ParametersAreNonnullByDefault
     public int getColorFromItemstack(ItemStack stack, int tintIndex) {
-        if(tintIndex == 1) return block.getMaterial().getColor(OreMaterial.Type.ORE);
-        else return 0xFFFFFF;
+        return tintIndex == 0 ? block.getMaterial().getColor(OreMaterial.Type.ORE) : 0xFFFFFF;
     }
 }

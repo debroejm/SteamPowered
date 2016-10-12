@@ -4,10 +4,7 @@ import com.majorpotato.steampowered.tileentity.machine.basic.TEHotPlate;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -19,7 +16,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraftforge.client.ForgeHooksClient;
-import org.lwjgl.opengl.GL11;
 
 public class RenderMachineBasic extends TileEntitySpecialRenderer {
 
@@ -30,17 +26,17 @@ public class RenderMachineBasic extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage) {
 
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
 
-        GL11.glTranslated(x, y, z);
+        GlStateManager.translate(x, y, z);
 
-        adjustLightFixture(te.getWorld(), te.getPos());
+        //adjustLightFixture(te.getWorld(), te.getPos());
 
         if(te instanceof TEHotPlate) {
-            renderHotPlateContents((TEHotPlate)te, Minecraft.getMinecraft().getRenderItem());
+            renderHotPlateContents((TEHotPlate)te);
         }
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     private void adjustLightFixture(World world, BlockPos pos) {
@@ -52,23 +48,38 @@ public class RenderMachineBasic extends TileEntitySpecialRenderer {
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (float) modulousModifier, divModifier);
     }
 
-    private void renderHotPlateContents(TEHotPlate hotPlate, RenderItem renderItem) {
+    private void renderHotPlateContents(TEHotPlate hotPlate) {
+        RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
         for(int i = 0; i < Math.min(hotPlate.getSizeInventory(), 9); i++) {
             int x = i % 3;
             int y = i / 3;
             ItemStack stack = hotPlate.getStackInSlot(i);
             if(stack != null) {
-                GL11.glPushMatrix();
-                GL11.glTranslatef(0.25f*(float)(x+1), 1.01f, 0.25f*(float)(y+1));
+
+                EntityItem entityitem = new EntityItem(hotPlate.getWorld(), 0.0D, 0.0D, 0.0D, stack);
+                entityitem.getEntityItem().stackSize = 1;
+                entityitem.hoverStart = 0.0F;
+
+                GlStateManager.pushMatrix();
+                GlStateManager.disableLighting();
+
+                GlStateManager.translate(0.25f*(float)(x+1), 1.01f, 0.25f*(float)(y+1));
                 if(!(stack.getItem() instanceof ItemBlock)) {
-                    GL11.glScalef(0.25f,0.25f,0.25f);
-                    GL11.glRotatef(90.0f, 1.0f, 0.0f, 0.0f);
+                    GlStateManager.scale(0.25f,0.25f,0.25f);
+                    GlStateManager.rotate(90.0f, 1.0f, 0.0f, 0.0f);
                 } else {
-                    GL11.glScalef(0.45f,0.45f,0.45f);
+                    GlStateManager.translate(0.0f, 0.1f, 0.0f);
+                    GlStateManager.scale(0.45f,0.45f,0.45f);
                 }
-                GL11.glColor4f(1F, 1F, 1F, 1F);
-                renderItem.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
-                GL11.glPopMatrix();
+
+                GlStateManager.pushAttrib();
+                RenderHelper.enableStandardItemLighting();
+                renderItem.renderItem(entityitem.getEntityItem(), ItemCameraTransforms.TransformType.FIXED);
+                RenderHelper.disableStandardItemLighting();
+                GlStateManager.popAttrib();
+
+                GlStateManager.enableLighting();
+                GlStateManager.popMatrix();
             }
         }
     }
